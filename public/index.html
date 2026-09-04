@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0e13">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Lasertag</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- ======================================================= status bar === -->
+<div id="netbar" class="netbar" hidden>
+  <span class="dot"></span><span id="netmsg"></span>
+</div>
+
+<!-- ============================================================= home === -->
+<section id="screen-home" class="screen active">
+  <div class="hero">
+    <div class="logo">
+      <svg viewBox="0 0 64 64" width="72" height="72" aria-hidden="true">
+        <path d="M12 8 L12 56 L18 56 L18 34 L40 34 L34 26 L40 18 L18 18 L18 8 Z" fill="#ff3b47"/>
+        <circle cx="49" cy="46" r="11" fill="none" stroke="#3d8bff" stroke-width="4"/>
+        <path d="M49 39 v14 M42 46 h14" stroke="#3d8bff" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 data-i18n="app.title">Lasertag</h1>
+    <p class="sub" data-i18n="app.sub"></p>
+  </div>
+
+  <div class="stack">
+    <label class="field">
+      <span data-i18n="home.name"></span>
+      <input id="nameInput" type="text" maxlength="16" autocomplete="nickname" data-i18n-ph="home.namePh">
+    </label>
+
+    <button id="btnCreate" class="btn btn-primary btn-xl" data-i18n="home.create"></button>
+
+    <div class="joinrow">
+      <input id="codeInput" class="codeinput" type="text" inputmode="latin" maxlength="4"
+             autocapitalize="characters" autocomplete="off" data-i18n-ph="home.codePh">
+      <button id="btnJoin" class="btn btn-ghost" data-i18n="home.join"></button>
+    </div>
+    <button id="btnScanJoin" class="btn btn-quiet" data-i18n="home.scanJoin"></button>
+
+    <div class="links">
+      <a href="/flags.html" target="_blank" rel="noopener" data-i18n="home.printFlags"></a>
+      <a href="/help.html" target="_blank" rel="noopener" data-i18n="home.help"></a>
+    </div>
+    <div class="langrow">
+      <button class="lang" data-lang="de">Deutsch</button>
+      <button class="lang" data-lang="en">English</button>
+    </div>
+    <p id="installHint" class="hint" data-i18n="home.installHint" hidden></p>
+  </div>
+</section>
+
+<!-- ============================================================ lobby === -->
+<section id="screen-lobby" class="screen">
+  <header class="topbar">
+    <button class="icon-btn" id="lobbyBack" aria-label="Back">&#8592;</button>
+    <div class="code-badge"><span data-i18n="lobby.code"></span> <strong id="lobbyCode">----</strong></div>
+    <button class="icon-btn" id="lobbyShare" aria-label="Share">&#8599;</button>
+  </header>
+
+  <div class="scroll">
+    <div class="modepick">
+      <button class="modebtn active" data-mode="ctf">
+        <strong data-i18n="lobby.modeCtf"></strong>
+        <em data-i18n="lobby.modeCtfDesc"></em>
+      </button>
+      <button class="modebtn" data-mode="domination">
+        <strong data-i18n="lobby.modeDom"></strong>
+        <em data-i18n="lobby.modeDomDesc"></em>
+      </button>
+      <button class="modebtn" data-mode="cs">
+        <strong data-i18n="lobby.modeCs"></strong>
+        <em data-i18n="lobby.modeCsDesc"></em>
+      </button>
+    </div>
+
+    <div class="teams">
+      <div class="teamcol red">
+        <h2 id="lobbyRedName">Rot</h2>
+        <ul id="listRed" class="playerlist"></ul>
+        <button class="btn btn-team red" data-team="red" data-i18n="lobby.joinRed"></button>
+      </div>
+      <div class="teamcol blue">
+        <h2 id="lobbyBlueName">Blau</h2>
+        <ul id="listBlue" class="playerlist"></ul>
+        <button class="btn btn-team blue" data-team="blue" data-i18n="lobby.joinBlue"></button>
+      </div>
+    </div>
+
+    <ul id="listNone" class="playerlist unassigned"></ul>
+    <button class="btn btn-quiet" id="btnShuffle" data-i18n="lobby.shuffle"></button>
+
+    <details class="settings" id="settingsBox">
+      <summary data-i18n="lobby.settings"></summary>
+
+      <label class="field row">
+        <span data-i18n="lobby.duration"></span>
+        <span class="ctrl"><input id="setDuration" type="number" min="1" max="180" step="1"> min</span>
+      </label>
+
+      <!-- Capture the Flag only -->
+      <div class="modeonly" data-for="ctf">
+        <label class="field row">
+          <span data-i18n="lobby.target"></span>
+          <span class="ctrl"><input id="setTarget" type="number" min="1" max="20" step="1"></span>
+        </label>
+        <label class="field check">
+          <input id="setOwnHome" type="checkbox">
+          <span data-i18n="lobby.ownHome"></span><em data-i18n="lobby.ownHomeNote"></em>
+        </label>
+      </div>
+
+      <!-- Domination only -->
+      <div class="modeonly" data-for="domination" hidden>
+        <label class="field row">
+          <span data-i18n="lobby.points"></span>
+          <span class="ctrl"><input id="setPoints" type="number" min="1" max="5" step="1"></span>
+        </label>
+        <label class="field row">
+          <span data-i18n="lobby.tickets"></span>
+          <span class="ctrl"><input id="setTickets" type="number" min="10" max="5000" step="10"></span>
+        </label>
+        <label class="field row">
+          <span data-i18n="lobby.drain"></span>
+          <span class="ctrl"><input id="setDrain" type="number" min="1" max="20" step="1"></span>
+        </label>
+        <label class="field row">
+          <span data-i18n="lobby.captureSec"></span>
+          <span class="ctrl"><input id="setCaptureSec" type="number" min="1" max="60" step="1"> s</span>
+        </label>
+        <label class="field check">
+          <input id="setScale" type="checkbox">
+          <span data-i18n="lobby.scaleWithLead"></span><em data-i18n="lobby.scaleWithLeadNote"></em>
+        </label>
+        <p class="estimate" id="domEstimate"></p>
+      </div>
+
+      <!-- Counter Strike only -->
+      <div class="modeonly" data-for="cs" hidden>
+        <label class="field row">
+          <span data-i18n="lobby.plantSec"></span>
+          <span class="ctrl"><input id="setPlantSec" type="number" min="1" max="60" step="1"> s</span>
+        </label>
+        <label class="field row">
+          <span data-i18n="lobby.fuseSec"></span>
+          <span class="ctrl"><input id="setFuseSec" type="number" min="5" max="300" step="1"> s</span>
+        </label>
+        <label class="field row">
+          <span data-i18n="lobby.defuseSec"></span>
+          <span class="ctrl"><input id="setDefuseSec" type="number" min="1" max="120" step="1"> s</span>
+        </label>
+      </div>
+
+      <label class="field row">
+        <span data-i18n="lobby.respawn"></span>
+        <span class="ctrl"><input id="setRespawn" type="number" min="0" max="300" step="5"> s</span>
+      </label>
+      <label class="field row">
+        <span id="labelRedName" data-i18n="lobby.redName"></span>
+        <span class="ctrl"><input id="setRedName" type="text" maxlength="12"></span>
+      </label>
+      <label class="field row">
+        <span id="labelBlueName" data-i18n="lobby.blueName"></span>
+        <span class="ctrl"><input id="setBlueName" type="text" maxlength="12"></span>
+      </label>
+    </details>
+
+    <div class="checklist">
+      <strong data-i18n="lobby.checklist"></strong>
+      <ol>
+        <li id="check1"></li>
+        <li data-i18n="lobby.check2"></li>
+        <li data-i18n="lobby.check3"></li>
+      </ol>
+    </div>
+  </div>
+
+  <footer class="bottombar">
+    <button id="btnStart" class="btn btn-primary btn-xl" data-i18n="lobby.start"></button>
+  </footer>
+</section>
+
+<!-- ============================================================= game === -->
+<section id="screen-game" class="screen">
+  <header class="gamebar">
+    <div class="score red"><span id="scoreRed">0</span><em id="labelRed"></em></div>
+    <div class="clock">
+      <div id="clock">--:--</div>
+      <div class="target" id="targetLine"></div>
+    </div>
+    <div class="score blue"><span id="scoreBlue">0</span><em id="labelBlue"></em></div>
+  </header>
+
+  <!-- Capture the Flag -->
+  <div class="flags" id="ctfView">
+    <div class="flagcard red" id="flagRed">
+      <span class="flabel"></span>
+      <strong class="fstate"></strong>
+    </div>
+    <div class="flagcard blue" id="flagBlue">
+      <span class="flabel"></span>
+      <strong class="fstate"></strong>
+    </div>
+  </div>
+
+  <!-- Domination -->
+  <div id="domView" hidden>
+    <ul id="pointList" class="pointlist"></ul>
+    <div id="drainLine" class="drainline"></div>
+  </div>
+
+  <!-- Counter Strike -->
+  <div id="csView" hidden>
+    <div class="csstatus" id="csStatusCard">
+      <strong id="csStatusMain"></strong>
+      <span id="csStatusSub"></span>
+    </div>
+  </div>
+
+  <div id="carrierBanner" class="banner" hidden></div>
+
+  <div class="actions">
+    <button id="btnScan" class="btn btn-scan">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M21 16v3a2 2 0 0 1-2 2h-3M3 12h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span id="btnScanLabel"></span>
+    </button>
+    <button id="btnStatus" class="btn btn-alive"></button>
+  </div>
+
+  <div id="respawnHint" class="respawn" hidden></div>
+
+  <div class="feedwrap">
+    <ul id="feed" class="feed"></ul>
+  </div>
+
+  <footer class="gamefoot">
+    <button id="btnRoster" class="btn btn-quiet" data-i18n="game.players"></button>
+    <button id="btnAbort" class="btn btn-quiet danger" data-i18n="game.endGame"></button>
+  </footer>
+</section>
+
+<!-- ============================================================== end === -->
+<section id="screen-end" class="screen">
+  <div class="endwrap">
+    <div id="endBadge" class="endbadge"></div>
+    <div id="endScore" class="endscore">0 - 0</div>
+    <div id="endReason" class="hint"></div>
+    <table class="statsTable"><thead><tr>
+      <th data-i18n="end.player"></th>
+      <th id="thCaps"></th><th id="thGrabs"></th><th data-i18n="end.hits"></th>
+    </tr></thead><tbody id="statsBody"></tbody></table>
+    <button id="btnRematch" class="btn btn-primary btn-xl" data-i18n="end.rematch"></button>
+    <button id="btnHome" class="btn btn-quiet" data-i18n="end.home"></button>
+  </div>
+</section>
+
+<!-- ========================================================== scanner === -->
+<div id="scanner" class="scanner" hidden>
+  <video id="video" playsinline muted></video>
+  <canvas id="canvas" hidden></canvas>
+  <div class="reticle"></div>
+  <div class="scanhint" id="scanhint"></div>
+  <button id="btnScanClose" class="btn btn-ghost scanclose" data-i18n="scan.cancel"></button>
+</div>
+
+<!-- ========================================================== roster ==== -->
+<div id="rosterSheet" class="sheet" hidden>
+  <div class="sheetbody">
+    <h3 data-i18n="game.players"></h3>
+    <ul id="rosterList" class="playerlist"></ul>
+    <button id="rosterClose" class="btn btn-ghost" data-i18n="scan.cancel"></button>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="/vendor/jsQR.js"></script>
+<script src="/i18n.js"></script>
+<script src="/game.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

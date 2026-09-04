@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lasertag &ndash; Regeln</title>
+<style>
+  body { margin:0; background:#0b0e13; color:#eef2f8;
+         font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+  .wrap { max-width: 720px; margin:0 auto; padding: 20px 20px 70px; }
+  h1 { font-size:25px; margin:14px 0 4px; }
+  h2 { font-size:18px; margin:30px 0 8px; }
+  p, li, td { color:#b9c2d0; }
+  strong { color:#eef2f8; }
+  a { color:#3d8bff; }
+  .card { background:#141922; border-radius:16px; padding:16px 18px; margin:14px 0; }
+  .red { color:#ff3b47; } .blue { color:#3d8bff; } .amber { color:#ffb020; }
+  ul, ol { padding-left:20px; }
+  table { width:100%; border-collapse:collapse; margin-top:10px; font-size:14px; }
+  td, th { padding:9px 6px; border-top:1px solid #1d2430; text-align:left; vertical-align:top; }
+  th { color:#8a94a6; font-size:12px; text-transform:uppercase; letter-spacing:.5px; }
+  .langrow { display:flex; gap:8px; justify-content:flex-end; }
+  .lang { background:transparent; border:1.5px solid #2b3444; color:#8a94a6; border-radius:999px;
+          padding:6px 14px; font-size:13px; cursor:pointer; font-family:inherit; font-weight:600; }
+  .lang.active { border-color:#eef2f8; color:#eef2f8; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="langrow">
+    <button class="lang" data-lang="de">Deutsch</button>
+    <button class="lang" data-lang="en">English</button>
+  </div>
+
+<!-- ============================================================ DEUTSCH -->
+<div data-lang-block="de">
+  <a href="/">&#8592; Zurück zur App</a>
+  <h1>So funktioniert es</h1>
+  <p>Die App ist Schiedsrichter und Anzeigetafel. Sie ist <strong>nicht</strong> mit den
+     BRX-Markierern verbunden – Treffer meldest du selbst per Knopfdruck.</p>
+
+  <h2>Capture the Flag</h2>
+  <div class="card">
+    <table>
+      <tr><th>Situation</th><th>Ergebnis</th></tr>
+      <tr><td>Du scannst die <strong>gegnerische</strong> Flagge, während sie in deren Basis liegt</td>
+          <td>Du trägst sie. Alle im Spiel werden sofort benachrichtigt.</td></tr>
+      <tr><td>Du scannst <strong>eure eigene</strong> Flagge, während du die gegnerische trägst</td>
+          <td><strong>Erobert.</strong> Ein Punkt für euch, die gegnerische Flagge kehrt in ihre Basis zurück.</td></tr>
+      <tr><td>Du wirst getroffen, während du eine Flagge trägst</td>
+          <td>Die Flagge <strong>kehrt sofort in ihre eigene Basis zurück</strong>.</td></tr>
+      <tr><td>Ein Team erreicht das Eroberungsziel</td>
+          <td>Das Spiel endet sofort für alle.</td></tr>
+      <tr><td>Vorher läuft die Zeit ab</td>
+          <td>Wer mehr Eroberungen hat, gewinnt. Gleichstand ist unentschieden.</td></tr>
+    </table>
+  </div>
+
+  <h2>Domination</h2>
+  <p>1 bis 5 nummerierte Punkte, alle starten <strong>neutral</strong>. Jeder Punkt hat einen
+     Balken, der zwischen <span class="red">Rot</span> und <span class="blue">Blau</span> läuft.</p>
+  <div class="card">
+    <table>
+      <tr><th>Situation</th><th>Ergebnis</th></tr>
+      <tr><td>Du scannst einen <strong>neutralen</strong> Punkt</td>
+          <td>Nach 5 Sekunden gehört er deinem Team.</td></tr>
+      <tr><td>Du scannst einen <strong>gegnerischen</strong> Punkt</td>
+          <td>Nach 5 Sekunden wird er neutral, nach weiteren 5 Sekunden gehört er euch.</td></tr>
+      <tr><td>Der Gegner scannt zurück, bevor der Balken durch die Mitte ist</td>
+          <td>Der Balken läuft von dort aus zurück – der Punkt hat nie den Besitzer gewechselt.</td></tr>
+      <tr><td>Ein Team hält <strong>mehr</strong> Punkte als das andere</td>
+          <td>Dem unterlegenen Team laufen die Tickets weg.</td></tr>
+      <tr><td>Ein Team hat keine Tickets mehr</td>
+          <td>Das andere Team gewinnt.</td></tr>
+      <tr><td>Vorher läuft die Zeit ab</td>
+          <td>Wer mehr Tickets übrig hat, gewinnt.</td></tr>
+    </table>
+    <p style="margin-bottom:0">Standard: <strong>300 Tickets</strong> und <strong>1 Ticket
+       pro Sekunde und Punkt Vorsprung</strong>. Bei einem Punkt Vorsprung dauert es also genau
+       5 Minuten – bei 3:0 nur 100 Sekunden. Beides ist in der Lobby einstellbar; wer den Abzug
+       lieber konstant hätte, schaltet „Abzug steigt mit dem Vorsprung“ aus.</p>
+  </div>
+  <p>Der Balken ist immer für alle sichtbar. Sterben ändert nichts am Besitz von Punkten –
+     tote Spieler können nur nicht scannen.</p>
+
+  <h2>Counter Strike</h2>
+  <p>Zwei Bombenplätze – dieselben nummerierten QR-Codes wie bei Domination (1 und 2), also
+     genügt ein Ausdruck für beide Modi. <span class="red">Rot</span> sind die Terroristen,
+     <span class="blue">Blau</span> die Counter-Terroristen. Eine einzelne Runde, kein
+     Seitenwechsel.</p>
+  <div class="card">
+    <table>
+      <tr><th>Situation</th><th>Ergebnis</th></tr>
+      <tr><td>Spielbeginn</td>
+          <td>Ein zufälliger Terrorist bekommt die Bombe.</td></tr>
+      <tr><td>Der Bombenträger scannt einen Bombenplatz</td>
+          <td>Legen beginnt. Nach der <strong>Legedauer</strong> ist sie platziert – alle werden
+              benachrichtigt, welcher Platz es ist.</td></tr>
+      <tr><td>Ein Counter-Terrorist scannt denselben Platz</td>
+          <td>Entschärfen beginnt.</td></tr>
+      <tr><td>Entschärfen ist fertig, bevor die Zündschnur abläuft</td>
+          <td><strong>Entschärft</strong> – Counter-Terroristen gewinnen.</td></tr>
+      <tr><td>Die Zündschnur (<strong>Explosions-Countdown</strong>) läuft zuerst ab</td>
+          <td><strong>Bumm</strong> – Terroristen gewinnen.</td></tr>
+      <tr><td>Der Bombenträger wird getroffen, bevor gelegt wurde</td>
+          <td>Die Bombe wandert zu einem anderen lebenden Terroristen.</td></tr>
+      <tr><td>Wer gerade legt oder entschärft, wird getroffen</td>
+          <td>Der Fortschritt ist futsch – jemand muss neu anfangen, falls noch Zeit bleibt.</td></tr>
+      <tr><td>Alle Terroristen sind tot, bevor gelegt wurde</td>
+          <td>Counter-Terroristen gewinnen sofort.</td></tr>
+      <tr><td>Die Spielzeit läuft ab, ohne dass gelegt wurde</td>
+          <td>Counter-Terroristen gewinnen automatisch.</td></tr>
+    </table>
+    <p style="margin-bottom:0">Sobald die Bombe liegt, spielt die normale Spielzeit keine Rolle
+       mehr – die Runde wird allein durch Zündschnur und Entschärfungsdauer entschieden, egal
+       wie lange das dauert. Legedauer, Explosions-Countdown und Entschärfungsdauer sind alle
+       in der Lobby einstellbar.</p>
+  </div>
+
+  <h2>Respawn</h2>
+  <p>Manuell und auf Ehrenbasis: <strong>Getroffen!</strong> tippen, zum Spawn zurücklaufen,
+     <strong>Wieder im Spiel</strong> tippen. Die empfohlene Wartezeit wird angezeigt, aber
+     nicht erzwungen. Einzige Ausnahme: In Counter Strike unterbricht ein Treffer laufendes
+     Legen oder Entschärfen sofort – siehe oben.</p>
+
+  <h2>Spielen ohne Empfang</h2>
+  <div class="card">
+    <p><strong>Installiere die App auf dem Startbildschirm, solange du noch Netz hast.</strong>
+       Danach startet und läuft sie komplett ohne Empfang – inklusive Kamera und QR-Scanner.</p>
+    <p>Nur das <em>Benachrichtigen der anderen Handys</em> braucht ein Netz. Ohne Empfang
+       werden deine Aktionen auf deinem Handy gespeichert, eine <span class="amber">gelbe
+       Leiste</span> zeigt, wie viele warten. Sobald irgendein Handy wieder Netz hat,
+       synchronisiert sich alles und jedes Gerät rechnet denselben Spielstand aus – die
+       Ereignisse werden in der Reihenfolge verarbeitet, in der sie <em>tatsächlich passiert
+       sind</em>, nicht in der sie ankamen.</p>
+    <p>In der Praxis: im Funkloch spielt ihr normal weiter und der Endstand stimmt, nur die
+       Meldung „die haben unsere Flagge!“ erreicht die anderen verspätet.</p>
+  </div>
+
+  <h2>Fairness</h2>
+  <ul>
+    <li>Scannen zwei gleichzeitig dieselbe Flagge, gewinnt immer der frühere Zeitstempel –
+        auch wenn dieses Handy erst später synchronisiert.</li>
+    <li>Tote Spieler können weder Flaggen noch Punkte nehmen; der Scan wird ignoriert.</li>
+    <li>Die Option „Eigene Flagge muss in der Basis sein“ bringt die klassische Regel und macht
+        Verteidigung wichtig. Standardmäßig aus, weil sie kleine Spiele festfahren kann.</li>
+  </ul>
+
+  <h2>Akku</h2>
+  <p>Der Bildschirm bleibt während des Spiels an. Rechne ungefähr mit dem Verbrauch einer
+     laufenden Navi-App. Zwischen den Runden die App schließen.</p>
+</div>
+
+<!-- ============================================================ ENGLISH -->
+<div data-lang-block="en" hidden>
+  <a href="/">&#8592; Back to the app</a>
+  <h1>How it works</h1>
+  <p>The app is the referee and scoreboard. It is <strong>not</strong> connected to your BRX
+     guns, so hits are on you: when you're hit, you tap the button.</p>
+
+  <h2>Capture the Flag</h2>
+  <div class="card">
+    <table>
+      <tr><th>Situation</th><th>What happens</th></tr>
+      <tr><td>You scan the <strong>enemy</strong> flag while it's at their base</td>
+          <td>You're carrying it. Everyone is alerted immediately.</td></tr>
+      <tr><td>You scan <strong>your own</strong> flag while carrying theirs</td>
+          <td><strong>Capture.</strong> Your team scores and the enemy flag returns to their base.</td></tr>
+      <tr><td>You're hit while carrying a flag</td>
+          <td>The flag <strong>resets to its own base</strong> immediately.</td></tr>
+      <tr><td>A team reaches the capture target</td>
+          <td>The game ends immediately for everyone.</td></tr>
+      <tr><td>The clock runs out first</td>
+          <td>Highest score wins; equal is a draw.</td></tr>
+    </table>
+  </div>
+
+  <h2>Domination</h2>
+  <p>1 to 5 numbered points, all starting <strong>neutral</strong>. Each point has a bar that
+     slides between <span class="red">Red</span> and <span class="blue">Blue</span>.</p>
+  <div class="card">
+    <table>
+      <tr><th>Situation</th><th>What happens</th></tr>
+      <tr><td>You scan a <strong>neutral</strong> point</td>
+          <td>After 5 seconds it's yours.</td></tr>
+      <tr><td>You scan an <strong>enemy-held</strong> point</td>
+          <td>After 5 seconds it goes neutral, after another 5 it's yours.</td></tr>
+      <tr><td>They scan back before the bar passes the middle</td>
+          <td>The bar runs back from where it got to — the point never changed hands.</td></tr>
+      <tr><td>One team holds <strong>more</strong> points than the other</td>
+          <td>The trailing team's tickets drain.</td></tr>
+      <tr><td>A team runs out of tickets</td>
+          <td>The other team wins.</td></tr>
+      <tr><td>The clock runs out first</td>
+          <td>Most tickets remaining wins.</td></tr>
+    </table>
+    <p style="margin-bottom:0">Defaults: <strong>300 tickets</strong> and <strong>1 ticket per
+       second per point of lead</strong>. So a one-point lead takes exactly 5 minutes, while 3-0
+       takes 100 seconds. Both adjustable in the lobby; turn off "drain scales with the lead"
+       for a flat rate.</p>
+  </div>
+  <p>The bar is visible to everyone at all times. Dying doesn't change who owns a point —
+     dead players simply can't scan.</p>
+
+  <h2>Counter Strike</h2>
+  <p>Two bomb sites — the same numbered QR codes as Domination (1 and 2), so one printout
+     covers both modes. <span class="red">Red</span> are the Terrorists,
+     <span class="blue">Blue</span> the Counter-Terrorists. One round, no side swap.</p>
+  <div class="card">
+    <table>
+      <tr><th>Situation</th><th>What happens</th></tr>
+      <tr><td>Kickoff</td>
+          <td>One random Terrorist gets the bomb.</td></tr>
+      <tr><td>The carrier scans a bomb site</td>
+          <td>Planting starts. After the <strong>plant time</strong> it's down — everyone is
+              told which site.</td></tr>
+      <tr><td>A Counter-Terrorist scans that same site</td>
+          <td>Defusing starts.</td></tr>
+      <tr><td>Defusing finishes before the fuse runs out</td>
+          <td><strong>Defused</strong> — Counter-Terrorists win.</td></tr>
+      <tr><td>The fuse (<strong>explosion countdown</strong>) runs out first</td>
+          <td><strong>Boom</strong> — Terrorists win.</td></tr>
+      <tr><td>The carrier is hit before planting</td>
+          <td>The bomb jumps to another living Terrorist.</td></tr>
+      <tr><td>Whoever is planting or defusing is hit</td>
+          <td>Progress is lost — someone has to start over, if there's still time.</td></tr>
+      <tr><td>Every Terrorist is down before the plant</td>
+          <td>Counter-Terrorists win outright.</td></tr>
+      <tr><td>The clock runs out with no plant</td>
+          <td>Counter-Terrorists win by default.</td></tr>
+    </table>
+    <p style="margin-bottom:0">Once the bomb is down, the main game clock stops mattering — the
+       round is decided by the fuse and the defuse timer alone, however long that takes. Plant
+       time, the explosion countdown and the defuse time are all adjustable in the lobby.</p>
+  </div>
+
+  <h2>Respawning</h2>
+  <p>Manual and on your honour: tap <strong>I'm hit</strong>, walk back to your spawn, tap
+     <strong>I'm back in</strong>. The suggested wait is shown but not enforced. One exception:
+     in Counter Strike, getting hit immediately interrupts an in-progress plant or defuse —
+     see above.</p>
+
+  <h2>Playing where there's no reception</h2>
+  <div class="card">
+    <p><strong>Install the app to your home screen while you still have signal.</strong>
+       After that it opens and runs with no reception at all — including the camera and QR
+       scanning.</p>
+    <p>Only <em>telling the other phones</em> needs a network. With no signal your taps are
+       stored on your phone and a <span class="amber">yellow bar</span> shows how many are
+       waiting. The moment any phone finds signal, everything syncs and every device
+       recalculates the same score — events are replayed in the order they <em>really
+       happened</em>, not the order they arrived.</p>
+    <p>In practice: in a dead zone you still play and the final score is right, but the
+       "they took our flag!" alert reaches the others late.</p>
+  </div>
+
+  <h2>Fair play</h2>
+  <ul>
+    <li>Two people scanning the same flag at once: the earlier timestamp always wins, even if
+        that phone syncs later.</li>
+    <li>Dead players can't take flags or points — the scan is simply ignored.</li>
+    <li>"Own flag must be at base to score" gives you the classic rule and makes defence
+        matter. Off by default because it can stall small games.</li>
+  </ul>
+
+  <h2>Battery</h2>
+  <p>The screen is kept awake during a game. Expect roughly what a running map app costs.
+     Close it between rounds.</p>
+</div>
+</div>
+
+<script src="/i18n.js"></script>
+<script>
+(function () {
+  function apply() {
+    document.documentElement.lang = I18N.lang;
+    document.querySelectorAll('[data-lang-block]').forEach(function (el) {
+      el.hidden = el.dataset.langBlock !== I18N.lang;
+    });
+    document.querySelectorAll('.lang').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.lang === I18N.lang);
+    });
+  }
+  document.querySelectorAll('.lang').forEach(function (b) {
+    b.addEventListener('click', function () { I18N.setLang(b.dataset.lang); apply(); });
+  });
+  apply();
+})();
+</script>
+</body>
+</html>

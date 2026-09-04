@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lasertag &ndash; QR</title>
+<style>
+  :root { --red:#e0212e; --blue:#1a6bd8; --grey:#444; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background:#0b0e13; color:#eef2f8; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 24px 20px 60px; }
+  h1 { font-size: 26px; margin: 8px 0 6px; }
+  p.lead { color:#8a94a6; margin:0 0 20px; line-height:1.55; }
+  a.back { color:#8a94a6; font-size:14px; text-decoration:none; }
+  .tabs { display:flex; gap:8px; margin-bottom:16px; }
+  .tab { flex:1; background:#141922; border:2px solid transparent; color:#8a94a6;
+         border-radius:14px; padding:13px; font-size:15px; font-weight:700; cursor:pointer;
+         font-family:inherit; }
+  .tab.active { border-color:#ff3b47; color:#eef2f8; background:#1b1218; }
+  .controls { background:#141922; border-radius:16px; padding:14px 16px; display:flex;
+              flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:20px; }
+  .controls label { font-size:14px; color:#8a94a6; display:flex; align-items:center; gap:8px; }
+  .controls input, .controls select {
+    background:#1d2430; border:1px solid #2b3444; color:#eef2f8;
+    border-radius:10px; padding:9px; font-size:15px; font-family:inherit; }
+  .controls input { width:72px; text-align:center; }
+  button.print { background: linear-gradient(180deg,#ff4d58,#e0212e); border:none; color:#fff;
+           padding:13px 22px; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer;
+           font-family:inherit; margin-left:auto; }
+  .langrow { display:flex; gap:8px; justify-content:flex-end; }
+  .lang { background:transparent; border:1.5px solid #2b3444; color:#8a94a6; border-radius:999px;
+          padding:6px 14px; font-size:13px; cursor:pointer; font-family:inherit; font-weight:600; }
+  .lang.active { border-color:#eef2f8; color:#eef2f8; }
+  .tips { background:#141922; border-radius:16px; padding:18px; margin-top:24px; font-size:14px;
+          color:#8a94a6; line-height:1.65; }
+  .tips strong { color:#eef2f8; }
+  .tips ul { margin:8px 0 0; padding-left:20px; }
+
+  /* ---- printable sheets ---- */
+  .sheet { background:#fff; color:#111; border-radius:8px; margin:18px 0; padding:26px;
+           text-align:center; border-top:14px solid var(--c); }
+  .sheet h2 { margin:6px 0 2px; font-size:40px; letter-spacing:-1px; color:var(--c);
+              text-transform:uppercase; }
+  .sheet .sub { margin:0 0 14px; font-size:15px; color:#555; }
+  .sheet canvas { width:100%; max-width:420px; height:auto; image-rendering:pixelated; }
+  .sheet .foot { margin-top:12px; font-size:13px; color:#666; }
+  .sheet .cut { margin-top:10px; font-size:11px; color:#999; letter-spacing:2px; }
+  .sheet .big { font-size:150px; font-weight:900; line-height:.9; color:var(--c); margin:0 0 4px; }
+  .red { --c: var(--red); } .blue { --c: var(--blue); } .neutral { --c: var(--grey); }
+  [hidden] { display:none !important; }
+
+  @media print {
+    body { background:#fff; color:#000; }
+    .wrap { max-width:none; padding:0; }
+    .noprint { display:none !important; }
+    .sheet { page-break-after: always; break-after: page; margin:0; border-radius:0;
+             height:100vh; display:flex; flex-direction:column; justify-content:center;
+             padding:10mm; }
+    .sheet canvas { max-width:145mm; }
+    .sheet .big { font-size:70mm; }
+    .sheet:last-of-type { page-break-after: auto; break-after: auto; }
+    @page { size: A4 portrait; margin: 8mm; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="noprint">
+    <div class="langrow">
+      <button class="lang" data-lang="de">Deutsch</button>
+      <button class="lang" data-lang="en">English</button>
+    </div>
+    <a class="back" href="/">&#8592; <span data-i18n="print.back"></span></a>
+    <h1 data-i18n="print.title"></h1>
+    <p class="lead" data-i18n="print.lead"></p>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="flags" data-i18n="print.tabFlags"></button>
+      <button class="tab" data-tab="points" data-i18n="print.tabPoints"></button>
+      <button class="tab" data-tab="cs" data-i18n="print.tabCs"></button>
+    </div>
+
+    <div class="controls">
+      <label><span data-i18n="print.size"></span>
+        <input id="size" type="number" min="200" max="1200" step="20" value="720"> px</label>
+      <label><span data-i18n="print.ecc"></span>
+        <select id="ecc">
+          <option value="H" data-i18n="print.eccH"></option>
+          <option value="Q" data-i18n="print.eccQ"></option>
+          <option value="M" data-i18n="print.eccM"></option>
+        </select>
+      </label>
+      <label id="countWrap" hidden><span data-i18n="print.howMany"></span>
+        <input id="count" type="number" min="1" max="5" step="1" value="3"></label>
+      <button class="print" onclick="window.print()" data-i18n="print.button"></button>
+    </div>
+  </div>
+
+  <div id="sheets"></div>
+
+  <div class="tips noprint">
+    <strong data-i18n="print.tipsTitle"></strong>
+    <ul>
+      <li data-i18n="print.tip1"></li>
+      <li data-i18n="print.tip2"></li>
+      <li data-i18n="print.tip3"></li>
+      <li data-i18n="print.tip4"></li>
+      <li data-i18n="print.tip5"></li>
+      <li id="tipDom" data-i18n="print.tipDom" hidden></li>
+      <li id="tipCs" data-i18n="print.tipCs" hidden></li>
+    </ul>
+  </div>
+</div>
+
+<script src="/vendor/qrcode.js"></script>
+<script src="/i18n.js"></script>
+<script>
+(function () {
+  'use strict';
+  var t = I18N.t;
+  var tab = 'flags';
+
+  function qrCanvas(text, px, ecc) {
+    var qr = qrcode(0, ecc);            // 0 = pick the smallest version that fits
+    qr.addData(text);
+    qr.make();
+    var n = qr.getModuleCount();
+    var cell = Math.max(2, Math.floor(px / (n + 8)));
+    var quiet = cell * 4;               // the spec's mandatory quiet zone
+    var size = n * cell + quiet * 2;
+
+    var c = document.createElement('canvas');
+    c.width = c.height = size;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = '#000';
+    for (var r = 0; r < n; r++)
+      for (var col = 0; col < n; col++)
+        if (qr.isDark(r, col)) ctx.fillRect(quiet + col * cell, quiet + r * cell, cell, cell);
+    return c;
+  }
+
+  function sheet(cls, title, sub, payload, px, ecc, bigLabel) {
+    var d = document.createElement('div');
+    d.className = 'sheet ' + cls;
+    var h = document.createElement('h2'); h.textContent = title; d.appendChild(h);
+    var p = document.createElement('p'); p.className = 'sub'; p.textContent = sub; d.appendChild(p);
+    if (bigLabel) {
+      var b = document.createElement('div'); b.className = 'big'; b.textContent = bigLabel;
+      d.appendChild(b);
+    }
+    d.appendChild(qrCanvas(payload, px, ecc));
+    var f = document.createElement('p'); f.className = 'foot';
+    f.textContent = 'Lasertag · ' + payload; d.appendChild(f);
+    var c = document.createElement('p'); c.className = 'cut';
+    c.textContent = '- - - - -  ' + t('print.cut') + '  - - - - -'; d.appendChild(c);
+    return d;
+  }
+
+  function redraw() {
+    var px = Math.max(200, Math.min(1200, +document.getElementById('size').value || 720));
+    var ecc = document.getElementById('ecc').value;
+    var host = document.getElementById('sheets');
+    host.innerHTML = '';
+
+    if (tab === 'flags') {
+      host.appendChild(sheet('red', t('print.redFlag'), t('print.redSub'), 'LTCTF:FLAG:RED', px, ecc));
+      host.appendChild(sheet('blue', t('print.blueFlag'), t('print.blueSub'), 'LTCTF:FLAG:BLUE', px, ecc));
+    } else if (tab === 'cs') {
+      // Same identity codes as Domination's points 1 & 2 -- printed sheets for
+      // one mode work for the other, no extra codes to carry.
+      host.appendChild(sheet('neutral', t('print.bombSite', { n: 1 }), t('print.bombSiteSub'),
+        'LTCTF:POINT:1', px, ecc, '1'));
+      host.appendChild(sheet('neutral', t('print.bombSite', { n: 2 }), t('print.bombSiteSub'),
+        'LTCTF:POINT:2', px, ecc, '2'));
+    } else {
+      var n = Math.max(1, Math.min(5, +document.getElementById('count').value || 3));
+      for (var i = 1; i <= n; i++) {
+        host.appendChild(sheet('neutral', t('print.point', { n: i }), t('print.pointSub'),
+          'LTCTF:POINT:' + i, px, ecc, String(i)));
+      }
+    }
+  }
+
+  function applyLang() {
+    I18N.applyDom();
+    document.documentElement.lang = I18N.lang;
+    document.querySelectorAll('.lang').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.lang === I18N.lang);
+    });
+    redraw();
+  }
+
+  document.querySelectorAll('.lang').forEach(function (b) {
+    b.addEventListener('click', function () { I18N.setLang(b.dataset.lang); applyLang(); });
+  });
+  document.querySelectorAll('.tab').forEach(function (b) {
+    b.addEventListener('click', function () {
+      tab = b.dataset.tab;
+      document.querySelectorAll('.tab').forEach(function (x) { x.classList.toggle('active', x === b); });
+      document.getElementById('countWrap').hidden = tab !== 'points';
+      document.getElementById('tipDom').hidden = tab !== 'points';
+      document.getElementById('tipCs').hidden = tab !== 'cs';
+      redraw();
+    });
+  });
+  ['size', 'ecc', 'count'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', redraw);
+  });
+
+  applyLang();
+})();
+</script>
+</body>
+</html>
