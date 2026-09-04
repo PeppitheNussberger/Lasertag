@@ -1,0 +1,20 @@
+# Render blueprint. Point Render at this repo and it configures itself.
+#
+# The free plan has no persistent disk, so games.json lives on an ephemeral
+# filesystem and disappears on restart. That is fine: the phones hold the full
+# event log and hand it back automatically (see restoreGame in public/app.js),
+# so a spin-down mid-session costs nothing.
+services:
+  - type: web
+    name: lasertag
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: "echo no build step - zero dependencies"
+    startCommand: node server.js
+    healthCheckPath: /api/time
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATA_FILE
+        value: /tmp/games.json

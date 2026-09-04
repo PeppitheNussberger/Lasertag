@@ -1,0 +1,25 @@
+{
+  "name": "lasertag",
+  "version": "1.0.0",
+  "description": "Capture the Flag, Domination and Counter Strike game master for Lasertag, with printable QR codes. Offline-tolerant PWA, German/English.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/rules.test.js",
+    "test:server": "node test/server.test.js",
+    "test:e2e": "node test/e2e.test.js",
+    "test:e2e:dom": "node test/e2e-domination.test.js",
+    "test:e2e:cs": "node test/e2e-cs.test.js",
+    "screens": "node test/screens.js",
+    "test:all": "node test/rules.test.js && node test/server.test.js && node test/e2e.test.js && node test/e2e-domination.test.js && node test/e2e-cs.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "playwright": "^1.40.0"
+  },
+  "private": true,
+  "license": "MIT"
+}
